@@ -1,0 +1,1226 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include"oper.h"
+#include"begin.h"
+#include<string.h>
+//Inialize head and tail to NULL
+void init(list *l)
+{
+     l->head = NULL; l->tail = NULL;
+}
+// Creating a doubly linked list
+void create(long long int data,list *l)
+{
+   int i;//node *tmp;
+   node *p = (node*)malloc(sizeof(node));
+   p->data = data;
+   if(l->head == NULL && l->tail == NULL){//first digit
+	    l->head = p;
+	    l->tail = p;
+	     p->next = NULL;
+	     p->prev = NULL;
+	     return;
+   }
+   /*else{
+   	if(l->head->next==NULL)
+     {
+ 	 //second digit
+ 	 l->head->next=p;
+ 	 p->prev=l->tail;
+     l->tail=p;
+     p->next=NULL;
+     }*/
+  //nth digit
+   else {
+  	l->tail->next = p;
+	p->prev = l->tail;
+  	l->tail = p; 
+  	p->next = NULL;
+    }
+}
+//Display from left to right
+void display(list *l) {
+	node *p = l->head;
+	while(p != NULL) {
+		printf("%lld",p->data);
+		p = p->next;
+     }
+	
+}
+//Display from right to left 
+void revdisplay(list *l)
+{
+     node *p = l->tail;
+     while(p!=NULL)
+       {
+           printf("%lld",p->data);
+           p = p->prev;
+      }
+}
+
+//Function to copy a node    
+list evdisplay(list *l)
+{
+     node *p=l->tail;list u;init(&u);
+     while(p!=NULL)
+       {
+           create(p->data,&u);
+           p=p->prev;
+      }
+return u;
+}
+ //Addition for multiplication    
+list add(list *l,list *m){
+  
+      long long count3=0,count4=0;
+     node *w=l->head;
+     node *x=m->head;
+          while(w != NULL)
+       {
+  //          printf(" this is l: %lld",w->data);
+           w = w -> next;
+           
+	   count3++;
+       }
+       while(x != NULL)
+       {
+              x = x-> prev;
+               count4++;
+       }
+          node *p,*p2;    
+         long long int big = count3 > count4 ? count3 : count4 ;
+	if(big == count3) { 
+		 p = l->head;
+		 p2 = m->head;
+	}
+	else {
+		 p2 = l->head;
+		 p = m->head;
+	}
+       
+	
+
+	 long long int sum= 0, carry= 0; list i;init(&i);
+     while(p!=NULL){ 
+   
+      if(p!=NULL && p2==NULL)
+          sum= p->data+carry;
+     else
+    		sum =  p->data + p2->data + carry ; 
+    //	printf("\n %lld\t %lld\t %lld \t\n",p->data,p2->data,sum);
+//	printf("\n%lld\n",sum); 
+    	carry = sum / 10;
+    	sum = sum % 10;
+    	create(sum,&i);
+    	if(p2 != NULL){
+    		p = p->next;
+    		p2 = p2->next; 
+    	} 
+	else 
+    	if(p != NULL  &&  p2 == NULL)
+		p = p->next;	
+    	
+}	
+     
+      
+      if(p == NULL && p2 == NULL) 
+         create(carry,&i);
+      
+	return i;
+     //i = evdisplay(&i);
+  // revdisplay(&i);
+    //return e;
+  
+   //revdisplay(&i);
+}
+
+//Addition
+list addm(list *l,list *m){
+       node *p,*p2;
+       node *w = l->tail;
+       //display(l);
+       int f = 0;
+      // display(m);
+       node *x = m->tail;
+       long long int count3 = 0 , count4 = 0;
+       while(w != NULL)
+       {
+           w = w -> prev;
+	   count3++;
+       }
+       while(x != NULL)
+       {
+              x = x-> prev;
+               count4++;
+       }
+        
+	long long int big = count3 > count4 ? count3 : count4 ;
+	if(big == count3) { 
+		 p = l->tail;
+		 p2 = m->tail;
+	}
+	else {
+		 p2 = l->tail;
+		 p = m->tail;
+	}
+	long long int sum = 0, carry = 0; list i; init(&i);
+     //  printf("%lld Big value:",big);
+	
+    while(p != NULL){
+	if(p2 == NULL & p != NULL)
+		sum = p->data + carry;
+	else
+    		sum =  p->data + p2->data + carry ; 
+    //	printf("\n %lld\t %lld\t %lld \t\n",p->data,p2->data,sum);
+	//printf("\n%lld\n",sum); 
+    	carry = sum / 10;
+    	sum = sum % 10;
+    	create(sum,&i);
+    	if(p2 != NULL){
+    		p = p->prev;
+    		p2 = p2->prev; 
+    	} 
+	else 
+    	if(p != NULL  &&  p2 == NULL)
+		p = p->prev;	
+    	
+	
+     }
+    if(p == NULL && p2 == NULL) 
+         create(carry,&i);
+ 
+                           
+	
+     i = evdisplay(&i);
+           list b;init(&b);
+             if(checkzero(&i)==0)
+                  {
+                     
+                     create(0,&b);
+                     return b;
+                  }
+              else{
+	list *bb;bb=&i;
+        node *ii;ii=bb->head;list e;init(&e);
+         while(ii!=NULL){
+               if(ii->data==0)
+                  ii=ii->next;
+                   else
+                   {
+                    	  while(ii!=NULL) 
+                    	 {  create(ii->data,&e);
+                    	    ii=ii->next;
+                    	  }
+                      break;
+                   }
+               
+          } 
+  // revdisplay(&i);
+        return e;
+    }
+                   
+  // revdisplay(&i);
+    
+   //revdisplay(&i);
+}  
+//Subtraction for expo shiftr
+list sub(list *l,list *m){
+/*	node *p = l->tail; node *a = m->tail;*/node *p,*a; long long int c = 0, s ; list u;
+       init(&u);
+  //     exit(0);
+       node *w = l->tail;list d; init(&d);node *f,*j,*r,*h;
+       node *x = m->tail;
+       int flags,flagg;
+       long long int count3 = 0 , count4 = 0;
+       
+         while(w != NULL && checkzero(l)!=0)
+       {
+      //     printf("W: \t %lld \t",w->data);
+           w = w -> prev;
+	   count3++;
+       }
+          if(checkzero(l)==0)
+             { count3=1;}
+       while(x != NULL)
+       {
+    //          printf("x: \t %lld \t",x->data); 
+               x = x-> prev;
+               count4++;
+       }
+        
+        long long int big = count3 > count4 ? count3 : count4 ;
+       // printf("\n Big: %lld \n",big);
+         if(count3==count4)
+           {
+                   f=l->head;//f=l
+                  j=m->head;//j=m
+                while(f!=NULL)
+                   {
+                      if(f->data!=j->data)
+ 			 { 
+//                            printf("\n In here not equal: \n ");
+  //                          printf("\n %lld % lld \n",f->data,j->data);
+                           if(f->data > j->data)
+                             { flags=1;break;}
+                           else if(f->data < j->data)
+                              {flags=0;break;}
+                         }
+                  else if(f->data==j->data)
+                          {
+                         
+                        if( f->next!=NULL){
+                            if(f->next->data > j->next->data)
+                               {   flags=1;break;}
+                        else if(f->next->data < j->next->data ) 
+                        	 {  flags=0;break;}
+                         else if(f->next->data==j->next->data)
+                            {  
+                                r=l->head;h=m->head;
+                               while(r!=NULL)
+                                  {    
+                                     if(r->data-h->data==0)
+                                       {  r=r->next;h=h->next;}
+                                    else if(r->data-h->data>0)
+                                           {  flags=1;break;  }         
+                                    else
+                                            {flags=0; break;}
+                                  }
+                           }
+                     }  
+                     
+                            else
+                            {flags=0;break;}                  
+                }
+            f=f->next;
+    }  
+       
+             if(flags==0)
+               {   
+         //          printf("\n here flag =0\n");
+                   p=m->tail;//p=m
+                   a=l->tail;//a=l
+               }
+          else
+               {
+           //       printf("\n here flag=1 \n");
+                  a=m->tail;//a=m
+                  p=l->tail;//p=l
+               }   
+  }                          
+	//long long int big = count3 > count4 ? count3 : count4 ;
+	else if(big == count3) { 
+		 p = l->tail;//p=l
+		 a = m->tail;//a=m
+	}
+	else {
+		 a = l->tail;//a=l
+		 p = m->tail;//p=m
+	}
+	  
+     //  printf("%lld Big value:",big);
+	while(p !=NULL){
+		if(p != NULL && a != NULL){
+	 		if(p->data + c >= a->data){
+        //                        printf("\n %lld %lld \n",p->data,a->data);
+	  			s = (p->data) + c - (a->data);	
+	  			c = 0;
+                	}
+    		         else { 
+				s = (p->data) +10 + c - (a->data);
+    			        c = -1;
+        	              }
+                create(s,&u);     
+     		p = p -> prev;
+     		a = a -> prev;
+		
+		
+  		}
+   		else if(p != NULL && a == NULL) {
+    			if(p->data >= 1) {
+            		s = (p->data)+c;
+                	c = 0;
+                       create(s,&u);
+            	}
+        	else {
+        	 	if(c!=0){           
+				s=(p->data)+10+c;
+				c=-1;
+         	    	 }
+			else{
+                                  if(p!=NULL)
+           			s = (p->data)+c;
+                	}	
+                     create(s,&u);
+            	}
+                 //if(s!=0 && p->prev==NULL)
+                  //create(s,&u);
+                //create(s,&u);
+    		p = p->prev;
+                // if(s!=0 && p==NULL)
+                //S  create(s,&u); //a = a->prev;
+   	}
+                // p = p->prev;
+   }
+             list b;init(&b);
+             if(checkzero(&u)==0)
+                  {
+                     
+                     create(0,&b);
+                     return b;
+                  }
+              else{
+	u = evdisplay(&u);list *bb;bb=&u;
+        node *i;i=bb->head;list e;init(&e);
+         while(i!=NULL){
+               if(i->data==0)
+                  i=i->next;
+                   else
+                   {
+                    	  while(i!=NULL) 
+                    	 {  create(i->data,&e);
+                    	    i=i->next;
+                    	  }
+                      break;
+                   }
+               
+          } 
+  // revdisplay(&i);
+        return e;
+    }
+} 
+//multiplication
+list mult(list *l,list *m)
+{      	
+	
+       node *p= l->tail;list t;list k;list o;
+       node *q= m->tail;
+       node *w=l->tail;
+       node *x=m->tail;long long int count3=0,count4=0;
+       while(w!=NULL)
+        {
+           w=w->prev;count3++;
+       }
+       while(x!=NULL)
+       {
+              x=x->prev;
+               count4++;
+       }
+	int i; //printf("%lld %lld",count3,count4);
+       init(&t);init(&o);init(&k);
+   long long int prod,prod2,c=0,flag,count=0,count1=0;
+   
+ // 48*12   6->9->(0)8->4
+          if(count3>=count4){
+	while(q!=NULL){
+        while(p!=NULL){
+			 
+		   	prod=(p->data)*(q->data)+c;
+			c=prod/10;
+		   	prod%=10;
+                    //    printf("\n %lld %lld %lld \n", p->data,q->data,prod);
+			
+                        create(prod,&t);       
+		   	
+		   	p=p->prev;
+                           if(p==NULL && c>0)
+                            create(c,&t);
+        }  
+         //revdisplay(&t);printf("\t");display(&k);
+	  
+          if(count!=0)
+           {
+             o=add(&t,&k);
+             memcpy(&k,&o,sizeof(o));
+	       
+           }
+            if (count==0)
+          { memcpy(&k,&t,sizeof(t));}  
+	  
+             init(&t);  
+        
+         q=q->prev;count1++;c=0; //printf(" Count:%lld",count1);    
+                if(q!=NULL)
+		{ 
+                   flag=0;
+                   p=l->tail;
+                   while(flag!=count1)
+			{
+			  create(0,&t);
+                  	  flag++;
+                       }
+               }
+           
+         
+                
+        
+
+        count=1;
+        
+    } 
+}
+
+     else
+       { 
+        //printf("In else");
+        while(p!=NULL){
+          while(q!=NULL){
+			 
+		prod=(q->data)*(p->data)+c;
+		c=prod/10;
+		prod%=10;
+              //  printf("\n %lld %lld %lld \n", q->data,p->data,prod);
+                create(prod,&t);       
+		q=q->prev;
+                if(q==NULL && c>0)
+                      create(c,&t);
+         }  
+       //revdisplay(&t);printf("\t");display(&k);
+	  
+          if(count!=0)
+            {
+              o=add(&t,&k);
+              memcpy(&k,&o,sizeof(o));
+	  }
+            if (count==0)
+          { memcpy(&k,&t,sizeof(t));}  
+	  
+             init(&t);  
+        
+         p=p->prev;count1++;c=0; //printf(" Count:%lld",count1);    
+                if(p!=NULL)
+		{ 
+                   flag=0;
+                   q=m->tail;
+                   while(flag!=count1)
+			{
+			  create(0,&t);
+                  	  flag++;
+                       }
+               }
+        count=1;
+        
+    }   
+ 
+}
+                
+                list u;init(&u);
+  
+      u = evdisplay(&k);list vv; init(&vv);
+              if(checkzero(&u)==0)
+                    {create(0,&vv);
+                     return vv;
+     
+                }
+        else
+        {
+      list *b;b=&u;
+      node *s;s=b->head;list e;init(&e);
+         while(s!=NULL){
+               if(s->data==0)
+                  s=s->next;
+                   else
+                   {
+                    	  while(s!=NULL) 
+                    	 {  create(s->data,&e);
+                    	    s=s->next;
+                    	  }
+                      break;
+                   }
+     }
+ 
+  // revdisplay(&i);
+   return e;
+   }
+}
+int checkzero(list *l){
+	node* p = l->tail;
+	 int f = 0;
+	while(p!=NULL){
+	    if(p->data == 0){
+//		printf("Value in side the check zero%lld",p->data);
+//		printf("Value in side the check zero%lld",p->prev->data);
+		p = p->prev;
+		
+	    }
+	    else{
+		f = 1;
+//		p = p->prev;
+                break;
+	 }
+		//break;
+	}	
+	if(f == 0){
+	//	printf("%d",f);
+		return 0;
+	}
+	else
+		return 1;
+}	
+// Shift left 
+list shiftr(list *l,list *m)
+{
+     // printf("\n In shiftr \n");
+      list u,d,g,i;node *p = m->tail;
+      init(&u);init(&g);init(&i);long long int dig;
+      init(&d);     
+      create(1,&u);
+      create(2,&g);
+      list j; list s;init(&s);
+      init(&j);list k;init(&k);list v;init(&v);
+      int c=1;
+      list f;
+      init(&f);
+      create(1,&f); 
+      list ty;
+      init(&ty);
+      node * q;
+      q = l->head;
+      while(q != NULL){
+      //  printf("\n Data in q:  %lld \n ",q->data);
+	create(q->data,&ty);
+        q = q->next;
+	}
+        
+        if(checkzero(&ty)==0)
+           {
+             create(1,&j);
+           }
+      else        
+	  {   
+      
+     		while(checkzero(&ty)!=0){
+     		     
+     	       
+     	//	       printf("Inside ");
+	
+     		    j = mult(&u,&g);init(&u);
+     		    memcpy(&u,&j,sizeof(j));
+     		    ty = sub(&ty,&f);
+     	//	    printf("\nValue of ty: "); display(&ty);
+     		 }
+          }       
+     		    while(p != NULL){
+     			      dig = p->data;
+     	//		      printf(" \n Data in p: %lld  \n ",p->data);
+     			      create(dig,&k);
+     			      p = p->prev;
+           
+     		   } 
+    
+    s= evdisplay(&k); 
+     	    
+  
+   d = mult(&j,&s);
+//   revdisplay(&d);
+   return d;
+}
+long long int counter(list *l)
+{  
+   long long int count3=0,count6=0;
+   node *p=l->head;
+        // while(count6!=2){
+    while(p != NULL ){
+       
+        printf("\n Data in p:  %lld \n ",p->data);
+	//create(p->data,&j);
+        //printf("\n first Count3: %lld\n",count3);
+        //p = p->prev;
+            while(p->data == 0)
+		p = p->next;
+            count3++;
+          
+      // printf("Second count 3: %lld \n",count3);           
+	
+       }
+      //   count6++;
+    // }   
+     return count3;
+   
+}
+/*int compare(list *l,list *m)
+{
+      node *h=l->head;
+      node *g=m->head;int flags=0;
+      node *w=l->tail;
+      node *f=m->tail;long long int count=0,count2=0;
+      long long int d=counter(l);
+      printf("d: %lld",d);  
+  
+        if(d==1)
+       {
+         if(h->data == 0 && h->prev == NULL)
+          count=1;
+       }
+          else{
+ 	   while(w!=NULL && checkzero(l)!=0)
+ 	    {
+ 	            w=w->prev;
+ 	            count++;
+ 	    }
+	}
+     
+        if(checkzero(l)==0)
+              count=1;
+
+    while(f!=NULL)
+     {
+            f=f->prev;
+            count2++;
+     }
+          	if(count>count2)
+               		return 1;
+         	else if(count<count2)
+                	return 0;
+          	else
+                	 {  
+
+
+          	    while(h!=NULL && g!=NULL && ( h->data - g->data) >=0)
+          	                { h=h->next;g=g->next;flags=1;}
+                              if(h!=NULL && flags==1)
+                                  flags=0;
+                  //     printf("flag: %d",flags);
+                      
+          	          
+           	  return flags;
+         	}
+} */      
+   
+/*list divi(list *l,list *m)
+{
+    node *p=l->tail;list *e,*f;list n1,n2;init(&n2);init(&n1);
+    node *q=m->tail;list d;init(&d);
+    list j;init(&j); list k; init(&k);list g;init(&g); 
+    list n; init(&n); long long int count3=0,count4=0;
+      while(p != NULL){
+       // printf("\n Data in p:  %lld \n ",p->data);
+	       create(p->data,&j);
+               p = p->prev;
+               count3++;
+	  }
+           
+           memcpy(&n,&j,sizeof(j));
+           
+           
+      while(q != NULL){
+       // printf("\n Data in p:  %lld \n ",p->data);
+	     //  create(q->data,&j);
+              create(q->data,&k);
+               q = q->prev;
+               count4++;
+	  }
+             printf(" \n Count 4 :%lld \n",count4);
+           long long int co=counter(&n), o = 0;
+           int count6=0;  d=evdisplay(&n);k=evdisplay(&k);
+      while(1)
+   {    
+       
+        
+      //   d=evdisplay(&n);
+	 printf("\n\nD\n\n:");
+         display(&d);
+         printf("\n\nK\n\n:");display(&k);
+	printf("\n\n");	
+         n = sub(&d,&k);
+        // n1=evdisplay(&n);exit(0);
+        // n2=evdisplay(&k);
+      //   printf("\n\n  The  value after sub : \n\n");display(&n);
+         co = counter(&n);
+        printf(" \n Value of len  : %lld \n",co);
+       // exit(0); 
+         memcpy(&d,&n,sizeof(n));
+         e=&n;
+	 f=&k;
+         
+         node *t = e->head ; node *w = f->head;
+	 
+        // printf("\n t: %lld \n",t->data);
+        // printf("\n w: %lld \n ",w->data);
+	// printf("\n\n N BEFORE ENTERING THE LOOP\n\n");
+	// display(&n);
+	 
+               if(co >= count4){
+			
+			
+              		if(checkzero(&n) == 0)
+                  	{
+				  
+				 o++;
+			//	while(t!=NULL)
+				// 	{//printf("%lld",t->data);
+				//	t = t->next;}
+		   		printf("\n In check zero case \n");
+                                printf("\n  Value of o: %lld \n",o);
+                                 create(o,&g);
+                                 return g;
+		   		}
+			 
+					
+			
+          		
+             	else	if(t->data == 0 && t->prev == NULL){
+                 		t = t->next;    
+                  		if( t->data >=w->data ){
+                 			o++;
+					printf("\n In single digit case \n");
+                                        printf("\n  Value of o: %lld \n",o);
+				}
+				t = e->head;
+			
+				
+              		}
+            	  else 	if(t->data >= w->data){ // count 32 and 3
+                     		o++;
+				printf("\n In multiple digit case \n");
+                                printf("\n  Value of o: %lld \n",o);
+				
+			}
+		  else	if(t->data < w->data && co>count4){ // count 32 and 3
+                 		o++;
+				printf("\n In small dig  num case \n");
+                                printf("\n  Value of o: %lld \n",o);
+                    }
+          	}
+            
+             
+             else
+                   {            printf("\n All  cases checked \n");
+                                printf("\n  Value of o: %lld \n",o);
+                                create(o,&g);
+                                return g;                          
+                  }
+              
+   } 
+         
+               
+            
+      
+
+} */
+ list expo(list *l,list *m)
+{
+ node *q=l->head;node *p=m->head;list k;init(&k);list ty;init(&ty);
+ list f;list j;init(&j);list yt;init(&yt);list e;init(&e);
+          init(&f);list v;init(&v);
+         create(1,&f); create(1,&v);
+        while(q != NULL){
+        printf("\n Data in q:  %lld \n ",q->data);
+	create(q->data,&ty);
+        q = q->next;
+	}
+          while(p != NULL){
+        printf("\n Data in p:  %lld \n ",p->data);
+	create(p->data,&k);
+        p = p->next;
+	}
+        memcpy(&e,&k,sizeof(k));
+ 
+        
+        if(checkzero(&ty)==0)
+           {
+             create(1,&j);
+           }
+      else        
+	  {   
+      
+     		while(checkzero(&ty)!=0){
+     		     
+     	        ty = sub(&ty,&f);
+     		     //  printf("Inside ");
+	
+     		   j = mult(&v,&e);init(&v);
+  //                  printf("Hello");
+     		    memcpy(&v,&j,sizeof(j));
+                                       
+    //                 printf("Value of ty: ");display(&ty);
+                        
+     		   // ty = sub(&ty,&f);
+//     		    printf("\nValue of ty: "); display(&ty);
+     		 }
+          } 
+                  
+             
+             
+	list *bb;bb=&j;
+        node *ii;ii=bb->head;list ee;init(&ee);
+         while(ii!=NULL){
+               if(ii->data==0)
+                  ii=ii->next;
+                   else
+                   {
+                    	  while(ii!=NULL) 
+                    	 {  create(ii->data,&ee);
+                    	    ii=ii->next;
+                    	  }
+                      break;
+                   }
+               
+          } 
+  // revdisplay(&i);
+        return ee;
+         
+     		       
+      
+
+}
+int  bigcheck(list *l,list *m)
+ {
+  	node *f = l->head;
+	node *u = m->head;
+
+      while(f!=NULL && u!=NULL)
+         {
+             f = f->next;
+             u = u->next;
+             
+	     if(f!=NULL && u==NULL){
+	          return 1;break;
+	      }
+	       if(f == NULL && u != NULL){
+			
+	          return  2;break;
+		}
+ 	       if(f==NULL && u==NULL){
+	          return 3;break;
+		}
+
+       
+
+         }
+}
+int comparator(list *l,list *m)
+{
+
+     node *p=l->head;
+     node *q=m->head;
+     int flag=1;
+
+      while(p!=NULL)
+          {
+             long long int c;
+            c= p->data - q->data;
+          //  printf("%lld and  %lld", p->data,q->data);
+              if(c>0)
+               return 1;
+            else if(c<0)
+               return 0;
+            else if(c==0)
+                 flag=0;
+          p=p->next;
+          q=q->next;
+      }
+      if(flag==0)
+          return 3;
+}
+
+
+ list divi3(list *l,list *m)
+{
+     int count;list x;init(&x);list h,g;init(&g);init(&h);
+     node *p=l->head;list v;init(&v);int flags;
+     node *q=m->head;long long int o = 0;
+	node *a ;list ll;
+       
+          while(p!=NULL)
+            {
+               // printf("%lld",p->data);
+                create(p->data,&h);
+                p=p->next;
+            }
+       
+          while(q!=NULL)
+           {
+                create(q->data,&g);
+                q=q->next;
+            }
+               if(checkzero(&g)==0)
+               { printf("\nError:\n");
+                  exit(1);
+               }
+    long long int hc;//printf("\n %lld hc:\n",hc);
+    int j = 0;    count = bigcheck(&h,&g);//printf("%d count :",count);
+     
+                      if(count==2)
+                           {  
+                              
+                              create(0,&v);
+                             
+                              return v;
+                           } 
+                      if(count==3){
+                            hc=comparator(&h,&g);
+                                 if(hc==3)
+                            {
+                               create(1,&v);
+                                return v;
+                            }
+                     }
+       memcpy(&x,&h,sizeof(h));
+    while( count!=2){
+              // printf("In here:"); 
+        //	count = bigcheck(&h,&g);
+            //    x = sub(&h,&g); 
+                
+              //  memcpy(&h,&x,sizeof(x));
+    		//printf("%d",count);
+		
+      		if(count == 1)
+        	{
+                    //  printf(" \n in count==1 \n");
+           		x = sub(&h,&g);
+                       // display(&x); 
+		//	a = x.head; //07  5  02 5
+		//	display(&x);
+           		memcpy(&h,&x,sizeof(x)); 
+           		o++;  
+                //        printf("\n O %lld\n",o);
+                       count = bigcheck(&h,&g);
+                      //  printf("Count:%d",count);
+                      
+                                                 
+        	}
+              if(count==3)
+                     {
+                          hc=comparator(&h,&g);
+                               
+                           if(hc==1)
+                            {
+                             x = sub(&h,&g);
+                  //      display(&x); 
+			a = x.head; //07  5  02 5
+		//	display(&x);
+           		memcpy(&h,&x,sizeof(x)); 
+           		o++;  
+                        //printf("\n O %lld\n",o);
+                       count = bigcheck(&h,&g);
+                          
+                                     
+                              
+                          }
+
+                     else if(hc==0)
+                       {
+                           count=2;
+                           
+                      }
+                     else if(hc==3)
+                     {
+                       
+           		o++;long long int i=0;
+                       char *s;
+                      s=(char*)malloc(sizeof(char)*8092);
+                         sprintf(s,"%lld",o);   
+		//	printf("o ki value: %s\n",s);
+                    //    printf("%c",s[i]);
+				 init(&v);  i=0;        
+                          while(s[i]!='\0')
+                           create(s[i++]-'0',&v);
+                       
+                          //create(o,&v); 
+                         return v;  
+                       
+                   }
+                          
+              }                       
+      	
+          
+          
+        }            
+      
+      init(&v);
+      long long int ii=0;
+      char *ss;
+      ss=(char*)malloc(sizeof(char)*8092);
+      sprintf(ss,"%lld",o);   
+			//printf("o ki value: %s\n",ss);
+                      //  printf("%c",ss[ii]);
+				 init(&v);  ii=0;        
+                          while(ss[ii]!='\0')
+                           create(ss[ii++]-'0',&v);
+     // create(o,&v);    
+     return v;
+
+
+}
+//shift right    
+list shiftr2(list *l,list *m)
+{
+
+     // printf("\n In shiftr \n");
+      list u,d,g,i;node *p = m->tail;
+      init(&u);init(&g);init(&i);long long int dig;
+      init(&d);     
+      create(1,&u);
+      create(2,&g);
+      list j; list s;init(&s);
+      init(&j);list k;init(&k);list v;init(&v);
+      int c=1;
+      list f;
+      init(&f);
+      create(1,&f); 
+      list ty;
+      init(&ty);
+      node * q;
+      q = l->head;
+      while(q != NULL){
+       // printf("\n Data in q:  %lld \n ",q->data);
+	create(q->data,&ty);
+        q = q->next;
+	}
+        
+        if(checkzero(&ty)==0)
+           {
+             create(1,&j);
+           }
+      else        
+	  {   
+      
+     		while(checkzero(&ty)!=0){
+     		     
+     	       
+     	//	       printf("Inside ");
+	
+     		    j = mult(&u,&g);init(&u);
+     		    memcpy(&u,&j,sizeof(j));
+     		    ty = sub(&ty,&f);
+     	//	    printf("\nValue of ty: "); display(&ty);
+     		 }
+          }       
+     		    while(p != NULL){
+     			      dig = p->data;
+     	//		      printf(" \n Data in p: %lld  \n ",p->data);
+     			      create(dig,&k);
+     			      p = p->prev;
+           
+     		   } 
+    
+    s= evdisplay(&k); 
+     	    
+  
+   d = divi3(&s,&j);
+//   revdisplay(&d);
+   return d;
+}
+list modulo(list *l,list *m)
+{
+
+     int count;list x;init(&x);list h,g;init(&g);init(&h);
+     node *p=l->head;list v;init(&v);int flags;
+     node *q=m->head;long long int o = 0;
+	node *a ;node *uu=l->head;
+       
+          while(p!=NULL)
+            {
+         //       printf("%lld",p->data);
+                create(p->data,&h);
+                p=p->next;
+            }
+          while(q!=NULL)
+           {
+                create(q->data,&g);
+                q=q->next;
+            }
+    long long int hc;
+    int j = 0;    count = bigcheck(&h,&g);//printf("%d count :",count);
+                      if(count==2)
+                           {
+                               while(uu!=NULL){
+                              create(uu->data,&v);
+                              uu=uu->next;
+                          } 
+                              return v;
+                          }
+                      if(count==3){
+                               hc=comparator(&h,&g);
+                             if(hc==3){
+                                create(0,&v);
+                                return v;
+                            }
+                      }
+       memcpy(&x,&h,sizeof(h));
+    while( count!=2){
+            //   printf("In here:"); 
+        //	count = bigcheck(&h,&g);
+            //    x = sub(&h,&g); 
+                
+              //  memcpy(&h,&x,sizeof(x));
+    		//printf("%d",count);
+		
+      		if(count == 1)
+        	{
+                //      printf(" \n in count==1 \n");
+           		x = sub(&h,&g);
+                        display(&x); 
+			a = x.head; //07  5  02 5
+		//	display(&x);
+           		memcpy(&h,&x,sizeof(x)); 
+           		o++;  
+                //        printf("\n O %lld\n",o);
+                       count = bigcheck(&h,&g);
+              //          printf("Count:%d",count);
+                      
+                                                 
+        	}
+              if(count==3)
+                     {
+                          hc=comparator(&h,&g);
+                               
+                           if(hc==1)
+                            {
+                             x = sub(&h,&g);
+                        display(&x); 
+			a = x.head; //07  5  02 5
+		//	display(&x);
+           		memcpy(&h,&x,sizeof(x)); 
+           		o++;  
+                  //      printf("\n O %lld\n",o);
+                       count = bigcheck(&h,&g);
+                          
+                                     
+                              
+                          }
+
+                     else if(hc==0)
+                       {
+                           count=2;
+                           
+                      }
+                     else if(hc==3)
+                     {
+                       
+           		o++;
+                        
+                         create(0,&v);
+                           
+                              
+                         
+                       
+                          //create(o,&v); 
+                         return v;  
+                       
+                   }
+                          
+              }                       
+      	
+          
+          
+        }            
+    
+           	node*ff=h.head;
+                         while(ff!=NULL)
+                      {   create(ff->data,&v);
+                           ff=ff->next;
+                    }          
+                         
+                       
+                          //create(o,&v); 
+                          
+     // create(o,&v);    
+     return v;
+
+
+}
+   
+      
+
+       
